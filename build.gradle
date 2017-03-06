@@ -1,0 +1,27 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+dependencies {
+  compile gradleApi()
+  compile localGroovy()
+  compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7"
+}
+
+repositories {
+  mavenCentral()
+}
+
+group = 'com.lwink'
+version = '1.0-SNAPSHOT'
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository(url: uri('../repo'))
+    }
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '3.4.1'
+}
