@@ -1,5 +1,12 @@
+plugins {
+  // Needed to upload to bintray
+  id "com.jfrog.bintray" version "1.7.3"
+}
+
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 dependencies {
   compile gradleApi()
@@ -9,6 +16,36 @@ dependencies {
 
 repositories {
   mavenCentral()
+}
+
+bintray {
+  user = System.getenv('BINTRAY_USER')
+  key = System.getenv('BINTRAY_KEY')
+  publications = ['MyPublication']
+  pkg {
+    repo = 'buildops-gradle'
+    name = 'buildops-gradle'
+    userOrg = 'lukewink'
+    licenses = ['Apache-2.0']
+    vcsUrl = 'https://github.com/lukewink/buildops-gradle'
+
+    version {
+      name = '1.0.0'
+      desc = 'Gradle plugin for interacting with buildops servers'
+      released = new Date()
+    }
+  }
+}
+
+publishing {
+  publications {
+    MyPublication(MavenPublication) {
+      from components.java
+      groupId 'com.lwink'
+      artifactId 'buildops-gradle'
+      version '1.0.0'
+    }
+  }
 }
 
 group = 'com.lwink'
